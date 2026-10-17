@@ -2754,6 +2754,11 @@ function showDogEdit(id) {
   $('#dog-edit-title').textContent = isNew ? 'Add a dog' : 'Edit details';
   $('#dog-edit-back').setAttribute('data-go', isNew ? 'dogs' : 'dog/' + id);
   form.reset();
+  // A new dog can only be Missing, Loose dog or Found; the closing statuses are for later, when editing.
+  const statusBox = form.elements.status;
+  statusBox.textContent = '';
+  Object.entries(STATUSES).filter(([, st]) => !isNew || st.active).forEach(([k, st]) => statusBox.appendChild(h('option', { value: k }, st.label)));
+  statusBox.value = 'missing';
   msg.textContent = '';
   $('#dog-photo-preview').hidden = true;
   state.subs.push(() => { if (edit.map) { edit.map.remove(); edit.map = null; } });
